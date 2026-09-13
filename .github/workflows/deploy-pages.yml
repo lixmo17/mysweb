@@ -3,9 +3,6 @@ name: 发布纯前端版到 GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - "standalone/**"
-      - ".github/workflows/deploy-pages.yml"
   workflow_dispatch:
 
 permissions:
