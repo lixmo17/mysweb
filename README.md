@@ -34,8 +34,13 @@ npm run start
 - 入口：`standalone/index.html`，题库内联在页面里
 - 统计存在浏览器本地，每台设备各存一份
 - 多设备汇总：在统计页生成「成绩码」发给负责汇总的同学，在汇总机上合并
-- 部署：把 `standalone/` 整个目录上传到任意静态托管（Vercel、Netlify、
-  GitHub Pages、对象存储等）即可；也可以本地 `npx serve standalone`
+- 在线地址（GitHub Pages 自动发布）：https://lixmo17.github.io/mysweb/
+- 打包好的压缩包：`standalone/题库测试1.zip`，直接发人即可解压使用
+- 也可以把 `standalone/` 目录传到任意静态托管（Vercel、Netlify、对象存储等），
+  或本地执行 `npx serve standalone`
+
+推送到 `main` 分支后，`.github/workflows/deploy-pages.yml` 会自动把
+`standalone/` 目录发布到 GitHub Pages，不需要手动操作。
 
 详见 `standalone/使用说明.md`。
 
