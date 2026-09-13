@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>在线答题系统（纯前端版）</title>
+<style>
+  :root {
+    --ink: #1e293b;
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --indigo: #4f46e5;
+    --green: #16a34a;
+    --red: #dc2626;
+    --amber: #d97706;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    background: #f1f5f9;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration: none; }
+  header {
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+  }
+  .bar {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand { font-weight: 700; color: var(--indigo); font-size: 17px; }
+  nav a { margin-left: 16px; font-size: 14px; color: var(--muted); }
+  nav a:hover { color: var(--indigo); }
+  main { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .06);
+  }
+  .card + .card { margin-top: 16px; }
+  .center { text-align: center; }
+  h1 { font-size: 26px; margin: 0 0 8px; }
+  h2 { font-size: 18px; margin: 0 0 16px; line-height: 1.7; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .btn {
+    display: inline-block;
+    border: 0;
+    border-radius: 12px;
+    padding: 12px 28px;
+    font-size: 16px;
+    font-weight: 600;
+    background: var(--indigo);
+    color: #fff;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn:hover { background: #4338ca; }
+  .btn-sm {
+    padding: 8px 14px;
+    font-size: 13px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .btn-ghost {
+    background: #fff;
+    color: var(--muted);
+    border: 1px solid #cbd5e1;
+  }
+  .btn-ghost:hover { background: #f8fafc; color: var(--ink); }
+  .btn-green { background: var(--green); }
+  .btn-green:hover { background: #15803d; }
+  .btn-tiny {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 48px 24px;
+  }
+  .hero p { max-width: 460px; margin: 0; color: var(--muted); }
+  .pill {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 3px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    background: #eef2ff;
+    color: var(--indigo);
+  }
+  .progress {
+    height: 8px;
+    background: #f1f5f9;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 12px 0 20px;
+  }
+  .progress > div { height: 100%; background: #6366f1; transition: width .25s; }
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--line);
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+  }
+  .opt:disabled { cursor: default; }
+  .opt .badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: #f1f5f9;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex: none;
+  }
+  .opt .letter-mark { flex: none; font-weight: 700; font-size: 13px; }
+  .opt.correct { border-color: #22c55e; background: #f0fdf4; color: #166534; }
+  .opt.correct .badge { background: var(--green); color: #fff; }
+  .opt.picked { border-color: #6366f1; background: #eef2ff; color: #4338ca; }
+  .opt.picked .badge { background: var(--indigo); color: #fff; }
+  .opt.wrong { border-color: #ef4444; background: #fef2f2; color: #991b1b; }
+  .opt.wrong .badge { background: var(--red); color: #fff; }
+  .opt.dim { color: #94a3b8; }
+  .opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .opt-grid .opt { margin-bottom: 0; flex-direction: column; align-items: stretch; }
+  .opt-head { display: flex; align-items: center; gap: 8px; }
+  .opt img { width: 100%; height: 130px; object-fit: contain; background: #f8fafc; border-radius: 8px; }
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .figures.two { grid-template-columns: repeat(2, 1fr); }
+  .figures figure { margin: 0; }
+  .figures figcaption { font-size: 12px; color: #94a3b8; font-weight: 600; }
+  .figures img {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .note {
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 16px;
+  }
+  .note.ok { background: #f0fdf4; color: #15803d; }
+  .note.bad { background: #fef2f2; color: #b91c1c; }
+  .note.onsite { background: #fffbeb; color: #b45309; }
+  .onsite-box {
+    background: #fffbeb;
+    color: #92400e;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 14px;
+  }
+  .dots { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 0;
+    background: #f1f5f9;
+    color: var(--muted);
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .dot.current { background: var(--indigo); color: #fff; }
+  .dot.ok { background: #dcfce7; color: #15803d; }
+  .dot.bad { background: #fee2e2; color: #b91c1c; }
+  .dot.onsite { background: #fef3c7; color: #b45309; }
+  .result-card {
+    background: #fff;
+    border-radius: 16px;
+    border-left: 4px solid var(--line);
+    padding: 20px;
+    margin-top: 16px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, .06);
+  }
+  .result-card.ok { border-left-color: #22c55e; }
+  .result-card.bad { border-left-color: #ef4444; }
+  .result-card.onsite { border-left-color: #fbbf24; }
+  .tag {
+    border-radius: 999px;
+    padding: 2px 12px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .tag.ok { background: #dcfce7; color: #15803d; }
+  .tag.bad { background: #fee2e2; color: #b91c1c; }
+  .tag.onsite { background: #fef3c7; color: #b45309; }
+  .score { font-size: 46px; font-weight: 800; color: var(--indigo); margin: 6px 0; }
+  .score span { font-size: 22px; color: #94a3b8; font-weight: 600; }
+  .thumbs { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .thumbs img {
+    width: 96px;
+    height: 96px;
+    object-fit: contain;
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .thumbs img.ok { border-color: #4ade80; }
+  .thumbs img.bad { border-color: #f87171; }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .stat { background: #fff; border-radius: 16px; padding: 18px; box-shadow: 0 1px 2px rgba(15, 23, 42, .06); }
+  .stat b { display: block; font-size: 24px; margin-top: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; background: #fff; }
+  th, td { text-align: left; padding: 12px 14px; }
+  thead th { background: #f8fafc; color: var(--muted); font-weight: 600; }
+  tbody tr { border-top: 1px solid #f1f5f9; }
+  .rate { display: flex; align-items: center; gap: 8px; }
+  .rate .bar { width: 90px; height: 8px; background: #f1f5f9; border-radius: 999px; overflow: hidden; }
+  .rate .bar > div { height: 100%; background: #6366f1; }
+  .table-wrap { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(15, 23, 42, .06); }
+  textarea {
+    width: 100%;
+    min-height: 96px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+    word-break: break-all;
+    resize: vertical;
+  }
+  .tools { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .hint { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+  .msg { font-size: 13px; margin-top: 8px; color: var(--indigo); }
+  .hidden { display: none !important; }
+  .q-title { font-size: 18px; font-weight: 700; margin: 4px 0 16px; }
+  @media (max-width: 560px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .figures { grid-template-columns: repeat(2, 1fr); }
+    .opt-grid { grid-template-columns: 1fr; }
+    .opt img { height: 160px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="brand" href="#/">在线答题系统</a>
+    <nav>
+      <a href="#/">首页</a>
+      <a href="#/stats">题目正确率</a>
+    </nav>
+  </div>
+</header>
+<main id="app"></main>
+
+<!-- ===== 题库：想加题就改这块 JSON，格式与 data/questions.json 完全一致 ===== -->
+<script id="question-bank" type="application/json">
+{
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "question": "人气动画《我推的孩子》中，传奇偶像星野爱所在的偶像团体是？",
+      "options": ["Mygo!!!!!", "Aqours", "B-小町", "coMETIK"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "question": "在《为美好的世界献上祝福》中，惠惠使用爆裂魔法的超长咏唱词的最后一个单词是？",
+      "options": ["Bomb", "Explosion", "Blast", "Rupture"],
+      "answer": "B",
+      "category": "动漫"
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "question": "《物语》系列金曲“恋爱循环”是哪位角色的角色曲？",
+      "options": ["羽川翼", "千石抚子", "神原骏河", "战场原黑仪"],
+      "answer": "B",
+      "category": "动漫"
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "question": "《死神》系列中，反派蓝染的卍解名字是？",
+      "options": ["镜花水月", "天锁斩月", "千本樱景严", "大红莲冰轮丸"],
+      "answer": "A",
+      "category": "动漫"
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "question": "《辉夜大小姐想让我告白》中，四宫辉夜最后去做的职业是？",
+      "options": ["教师", "政治家", "法官", "摄影师"],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 6,
+      "type": "choice",
+      "question": "在《宝可梦》系列中，不能学习“龙舞”技能的宝可梦是？",
+      "options": ["快龙", "暴飞龙", "烈咬陆鲨", "三首恶龙"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "question": "下列异世界动画中，哪部动画不涉及主角穿越进异世界的环节？",
+      "options": ["Re：从零开始的异世界生活", "葬送的芙莉莲", "零之使魔", "游戏人生"],
+      "answer": "B",
+      "category": "动漫"
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "question": "下列恋爱动画中，哪个动画的故事不是发生在高中？",
+      "options": ["堀与宫村", "我的青春恋爱物语果然有问题", "冰菓", "我心里危险的东西"],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 9,
+      "type": "choice",
+      "question": "在《刃牙》系列中，击败了宫本武藏的人是？",
+      "options": ["烈海王", "愚地独步", "本部以藏", "花山熏"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 10,
+      "type": "choice",
+      "question": "《机动战士高达 铁血的奥尔芬斯》中，团长奥尔加·伊兹卡在临死前的最后一句话是？",
+      "options": ["“不要停下来啊”", "“我看见了时间”", "“我说过我会保护你的”", "“就托付给你了，巴纳吉”"],
+      "answer": "A",
+      "category": "动漫"
+    },
+    {
+      "id": 11,
+      "type": "choice",
+      "question": "下列哪部少女乐队动画的主角乐队没有键盘手？",
+      "options": ["Girls Band Cry", "轻音少女", "BangDream Ave Mujica", "孤独摇滚"],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 12,
+      "type": "choice",
+      "question": "下列哪件宝具，没有被卫宫士郎投影过？",
+      "options": ["射杀百头", "炽天覆七重圆环", "万符必应破戒", "天地乖离开辟之星"],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 13,
+      "type": "choice",
+      "question": "在《JoJo的奇妙冒险》中，哪句话不是乔斯达家的人说的？",
+      "options": ["“这就是我的逃跑路线”", "“这里满员了”", "“就像是在新年的早上换上新内裤一样清爽”", "“你的下一句话是——”"],
+      "answer": "A",
+      "category": "动漫"
+    },
+    {
+      "id": 14,
+      "type": "choice",
+      "question": "在《电锯人》第一季中，完结时电次吃的食物是？",
+      "options": ["抹茶巴菲", "炸鸡块", "生姜烧肉", "牛肉饭"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 15,
+      "type": "choice",
+      "question": "下列怪物中，哪一只怪物的首次出现是在《怪物猎人世界》中？",
+      "options": ["泡狐龙", "天彗龙", "雷狼龙", "灭尽龙"],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 16,
+      "type": "choice",
+      "question": "“为了活下去，我要杀了你”这句台词出自？",
+      "options": ["咒术回战", "鬼灭之刃", "碧蓝之海", "火影忍者"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 17,
+      "type": "choice",
+      "question": "下列哪位女角色是完完全全的“直女”？",
+      "options": ["甘织玲奈子", "御坂美琴", "井之上泷奈", "斯莱塔·墨丘利"],
+      "answer": "B",
+      "category": "动漫"
+    },
+    {
+      "id": 18,
+      "type": "choice",
+      "question": "在《EVA》TV版最后一集中，大家围着真嗣说了什么？",
+      "options": ["辛苦你了", "不要再驾驶EVA了", "恭喜", "欢迎回来"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 19,
+      "type": "choice",
+      "question": "以下哪名角色不具有多重人格？",
+      "options": ["武藤游戏", "夜神月", "若叶睦", "迪亚波罗"],
+      "answer": "B",
+      "category": "动漫"
+    },
+    {
+      "id": 20,
+      "type": "choice",
+      "question": "在万代南梦宫旗下作品中，出现了一句台词“我们不是机器！我们是活生生的人类啊！”，该作品是？",
+      "options": ["《机动战士高达00》", "《超时空要塞F》", "《学园偶像大师》", "《叛逆的鲁鲁修》"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 21,
+      "type": "choice",
+      "question": "在电影《千与千寻》中，角色“小白”的真实身份是？",
+      "options": ["阴阳师", "幽灵", "河神", "山神"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 22,
+      "type": "fill",
+      "question": "这是一个二刺猿留下的谜题，你能破译出一个六字密码吗？",
+      "images": ["questions/puzzle-1.jpg", "questions/puzzle-2.jpg", "questions/puzzle-3.png", "questions/puzzle-4.jpg", "questions/puzzle-5.png", "questions/puzzle-6.jpg"],
+      "answer": "",
+      "category": "综合",
+      "countInStats": false
+    },
+    {
+      "id": 23,
+      "type": "choice",
+      "question": "连一刻也没有为五条的死而哀悼，马上赶到战场的是——",
+      "options": ["西中之虎 虎杖悠仁", "雷神 鹿紫云一", "金牌律师 日车宽见", "纯爱战神 乙骨忧太"],
+      "answer": "B",
+      "category": "动漫"
+    },
+    {
+      "id": 24,
+      "type": "choice",
+      "question": "孩子们，我是奇异博士，你能帮我找出一条吉尔伽美什赢到最后的时间线吗？",
+      "options": ["Fate/Zero", "Fate/Stay Night", "Fate/Strange Fake", "Fate/Extra CCC"],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 25,
+      "type": "choice",
+      "question": "冬天是败犬的季节，那么下面哪个动画的女主角和男主角是青梅竹马并成功在一起了？",
+      "options": ["《龙王的工作》", "《中二病也想谈恋爱》", "《败犬女主太多了》", "《路人女主的养成方法》"],
+      "answer": "A",
+      "category": "动漫"
+    },
+    {
+      "id": 26,
+      "type": "choice",
+      "question": "同名角色是二次元界津津乐道的话题，下面哪两位同名角色性别相同？",
+      "options": ["优木 雪菜（Setsuna）—— 刹那（Setsuna）·F·清英", "惣流·明日香（Asuka）·兰格雷 —— 真 飞鸟（Asuka）", "吉良（Kira） 吉影 —— 基拉（Kira）·大和", "圣园 未花（Mika）—— 三日月（Mikazuki）·奥古斯"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 27,
+      "type": "choice",
+      "question": "你接到一则报案，发生了一起凶杀案，死者有四个疑似身份，你觉得死者只可能是？",
+      "options": ["二阶堂希罗", "菜月昴", "网代慎平", "巴麻美"],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 28,
+      "type": "choice",
+      "question": "以下哪部作品是真正的正作而非外传？",
+      "options": ["《某科学的超电磁炮》", "《某少女的暗部共栖》", "《魔法禁书目录》", "《某科学的一方通行》"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 29,
+      "type": "choice",
+      "question": "以下哪张脸的主人是阿尔托莉雅？",
+      "optionImages": ["questions/saber-a.jpg", "questions/saber-b.jpg", "questions/saber-c.jpg", "questions/saber-d.jpg"],
+      "answer": "A",
+      "category": "动漫"
+    },
+    {
+      "id": 30,
+      "type": "fill",
+      "question": "这四个角色的图片顺序被打乱了，你能给出正确的排序吗？请说出 1、2、3、4 分别是谁。（提示：三角初华 / 一之濑帆波 / 四宫辉夜 / 二阶堂希罗）",
+      "images": ["questions/sort-1.png", "questions/sort-2.jpg", "questions/sort-3.jpg", "questions/sort-4.png"],
+      "answer": "",
+      "category": "综合",
+      "countInStats": false
+    }
+  ]
+}
+</script>
+
+<script>
+/* ========== 1. 基础数据与工具 ========== */
+var BANK = JSON.parse(document.getElementById("question-bank").textContent).questions;
+var LETTERS = ["A", "B", "C", "D", "E", "F"];
+var STORAGE_KEY = "mysweb.records.v1";
+var IMPORTED_KEY = "mysweb.imported.v1";
+
+function $(sel) { return document.querySelector(sel); }
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+function normChoice(v) { return String(v || "").trim().toUpperCase(); }
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+function isOnsite(q) { return q.type !== "choice"; }
+function hasKey(q) { return String(q.answer || "").trim() !== ""; }
+function countedQuestion(q) { return !isOnsite(q) && q.countInStats !== false && hasKey(q); }
+function drawQuestions(n) { return shuffle(BANK).slice(0, Math.min(n, BANK.length)); }
+
+/* ========== 2. 本地统计存取（第一台、第三种方案）========== */
+var memoryStore = {};
+function storeGet(key) {
+  try {
+    var v = localStorage.getItem(key);
+    if (v !== null) return v;
+  } catch (e) {}
+  return Object.prototype.hasOwnProperty.call(memoryStore, key) ? memoryStore[key] : null;
+}
+function storeSet(key, value) {
+  memoryStore[key] = value;
+  try { localStorage.setItem(key, value); } catch (e) {}
+}
+function loadRecords() {
+  try {
+    var raw = storeGet(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+function saveRecords(rec) {
+  storeSet(STORAGE_KEY, JSON.stringify(rec));
+}
+function loadImported() {
+  try {
+    var raw = storeGet(IMPORTED_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+}
+function saveImported(list) {
+  storeSet(IMPORTED_KEY, JSON.stringify(list));
+}
+function recordQuiz(results) {
+  var rec = loadRecords();
+  results.forEach(function (r) {
+    if (!r.counted) return;
+    var cur = rec[r.id] || { c: 0, t: 0 };
+    rec[r.id] = { c: cur.c + (r.isCorrect ? 1 : 0), t: cur.t + 1 };
+  });
+  saveRecords(rec);
+}
+function statsRows() {
+  var rec = loadRecords();
+  return BANK.filter(countedQuestion).map(function (q) {
+    var r = rec[q.id] || { c: 0, t: 0 };
+    return {
+      id: q.id,
+      question: q.question,
+      category: q.category,
+      correct: r.c,
+      total: r.t,
+      rate: r.t > 0 ? r.c / r.t : 0
+    };
+  });
+}
+function summary() {
+  var rows = statsRows();
+  var attempts = rows.reduce(function (s, r) { return s + r.total; }, 0);
+  var attempted = rows.filter(function (r) { return r.total > 0; });
+  var avg = attempted.length
+    ? attempted.reduce(function (s, r) { return s + r.rate; }, 0) / attempted.length
+    : 0;
+  return { total: BANK.length, counted: rows.length, attempts: attempts, avg: avg, rows: rows };
+}
+
+/* ========== 3. 成绩码（导出 / 合并）========== */
+function makeCode() {
+  var rows = loadRecords();
+  var payload = { v: 1, src: deviceTag(), at: new Date().toISOString(), records: rows };
+  var id = Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+  payload.id = id;
+  return "MW1-" + b64encode(JSON.stringify(payload));
+}
+function b64encode(str) {
+  return btoa(unescape(encodeURIComponent(str))).replace(/=+$/, "");
+}
+function b64decode(str) {
+  var pad = str.length % 4 ? "=".repeat(4 - (str.length % 4)) : "";
+  return decodeURIComponent(escape(atob(str + pad)));
+}
+function parseCode(code) {
+  var text = String(code || "").trim().replace(/\s+/g, "");
+  if (!text) throw new Error("请先粘贴成绩码");
+  if (text.indexOf("MW1-") === 0) text = text.slice(4);
+  var data = JSON.parse(b64decode(text));
+  if (!data || typeof data.records !== "object") throw new Error("成绩码内容无法识别");
+  return data;
+}
+function mergeCode(code) {
+  var data = parseCode(code);
+  var imported = loadImported();
+  if (data.id && imported.indexOf(data.id) >= 0) {
+    return { ok: false, msg: "这份成绩码之前已经合并过了，没有重复计入。" };
+  }
+  var rec = loadRecords();
+  var n = 0;
+  Object.keys(data.records).forEach(function (k) {
+    var src = data.records[k] || {};
+    var c = Number(src.c) || 0;
+    var t = Number(src.t) || 0;
+    if (t <= 0) return;
+    var cur = rec[k] || { c: 0, t: 0 };
+    rec[k] = { c: cur.c + c, t: cur.t + t };
+    n++;
+  });
+  saveRecords(rec);
+  if (data.id) { imported.push(data.id); saveImported(imported); }
+  return { ok: true, msg: "已合并 " + n + " 道题的统计（来源：" + (data.src || "未知设备") + "）。" };
+}
+function deviceTag() {
+  var key = "mysweb.device.v1";
+  var v = localStorage.getItem(key);
+  if (!v) {
+    v = "设备-" + Math.random().toString(36).slice(2, 6).toUpperCase();
+    try { localStorage.setItem(key, v); } catch (e) {}
+  }
+  return v;
+}
+function download(name, text, withBom) {
+  var blob = new Blob([withBom ? "\ufeff" + text : text], { type: "text/plain;charset=utf-8" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+}
+function reportText() {
+  var s = summary();
+  var lines = [];
+  lines.push("正确率统计");
+  lines.push("生成时间：" + new Date().toLocaleString("zh-CN", { hour12: false }));
+  lines.push("题目总数：" + s.total + "（计入统计 " + s.counted + " 题）");
+  lines.push("累计答题次数：" + s.attempts);
+  lines.push("整体平均正确率：" + (s.avg * 100).toFixed(1) + "%");
+  lines.push("");
+  lines.push(["题号", "分类", "答对次数", "总次数", "正确率", "题目"].join("\t"));
+  s.rows.forEach(function (r) {
+    lines.push([r.id, r.category, r.correct, r.total, (r.rate * 100).toFixed(1) + "%",
+      r.question.replace(/\s+/g, " ")].join("\t"));
+  });
+  return lines.join("\r\n");
+}
+
+/* ========== 4. 视图：首页 ========== */
+function viewHome() {
+  $("#app").innerHTML =
+    '<div class="card center hero">' +
+      "<h1>在线答题系统</h1>" +
+      "<p>每次从题库中随机抽取 10 道题。选择题作答后立即判定对错，十道题全部完成后即可查看本次得分。</p>" +
+      '<button class="btn" id="start-quiz" style="font-size:19px;padding:16px 44px">开始游戏</button>' +
+      '<a class="btn btn-ghost btn-tiny" href="#/stats">查看题目正确率</a>' +
+    "</div>";
+  $("#start-quiz").onclick = function () {
+    state.quiz = newQuiz();
+    location.hash = "#/quiz";
+  };
+}
+
+/* ========== 5. 视图：答题 ========== */
+var state = { quiz: null, result: null };
+
+function newQuiz() {
+  var qs = drawQuestions(10);
+  return { questions: qs, answers: {}, checked: {}, current: 0, submitted: false };
+}
+
+function viewQuiz() {
+  var qz = state.quiz;
+  if (!qz) {
+    location.hash = "#/";
+    return;
+  }
+  var q = qz.questions[qz.current];
+  var scored = qz.questions.filter(function (x) { return !isOnsite(x); });
+  var answered = scored.filter(function (x) { return normChoice(qz.answers[x.id]); }).length;
+  var runningScore = Object.keys(qz.checked).filter(function (k) { return qz.checked[k].isCorrect; }).length;
+  var html = "";
+
+  html += '<div class="card">';
+  html += '<div class="row"><span class="pill">第 ' + (qz.current + 1) + " 题 / 共 " + qz.questions.length + " 题</span>" +
+          '<span class="muted">已作答 ' + answered + "/" + scored.length +
+          (runningScore > 0 ? " · 已答对 " + runningScore : "") + "</span></div>";
+  html += '<div class="progress"><div style="width:' + ((qz.current + 1) / qz.questions.length * 100) + '%"></div></div>';
+  html += '<div class="muted" style="font-size:12px">' + esc(q.category) + " · " + (isOnsite(q) ? "现场题" : "选择题") + "</div>";
+  html += '<div class="q-title">' + (qz.current + 1) + ". " + esc(q.question) + "</div>";
+
+  if (q.images && q.images.length) {
+    html += '<div class="figures' + (q.images.length >= 4 ? "" : " two") + '">';
+    q.images.forEach(function (src, i) {
+      html += "<figure><figcaption>" + (i + 1) + "</figcaption><img src=\"" + esc(src) + '" alt="配图 ' + (i + 1) + '"></figure>';
+    });
+    html += "</div>";
+  }
+
+  if (!isOnsite(q)) {
+    var res = qz.checked[q.id];
+    var picked = qz.answers[q.id] || "";
+    var count = (q.options && q.options.length) || (q.optionImages && q.optionImages.length) || 0;
+    var grid = q.optionImages && q.optionImages.length;
+    html += grid ? '<div class="opt-grid">' : "<div>";
+    for (var i = 0; i < count; i++) {
+      var letter = LETTERS[i];
+      var cls = "opt";
+      if (res) {
+        if (res.hasKey && res.correctAnswer === letter) cls += " correct";
+        else if (picked === letter && !res.isCorrect) cls += " wrong";
+        else cls += " dim";
+      } else if (picked === letter) {
+        cls += " picked";
+      }
+      html += '<button class="' + cls + '" data-pick="' + letter + '"' + (res ? " disabled" : "") + ">";
+      html += '<span class="opt-head"><span class="badge">' + letter + "</span>";
+      if (grid) html += "</span>";
+      if (grid) {
+        html += '<span><img src="' + esc(q.optionImages[i]) + '" alt="选项 ' + letter + '">' +
+                (q.options && q.options[i] ? "<span>" + esc(q.options[i]) + "</span>" : "") + "</span>";
+      } else {
+        html += "<span>" + esc(q.options[i]) + "</span>";
+        if (res && res.hasKey && res.correctAnswer === letter) html += '<span class="letter-mark" style="color:#15803d;margin-left:auto">✓ 正确答案</span>';
+        if (res && picked === letter && !res.isCorrect) html += '<span class="letter-mark" style="color:#b91c1c;margin-left:auto">✗ 你的选择</span>';
+        html += "</span>";
+      }
+      html += "</button>";
+    }
+    html += "</div>";
+
+    if (res) {
+      if (!res.hasKey) html += '<div class="note onsite">这题暂未录入标准答案，不计入本次得分。</div>';
+      else if (res.isCorrect) html += '<div class="note ok">回答正确！</div>';
+      else html += '<div class="note bad">回答错误，正确答案是 ' + esc(res.correctAnswer) + "</div>";
+    }
+  } else {
+    html += '<div class="onsite-box"><b>本题由现场工作人员判定。</b><br>把答案告诉工作人员即可，本题不计入得分，也不计入正确率统计。</div>';
+  }
+  html += "</div>";
+
+  html += '<div class="row" style="margin-top:16px">';
+  html += '<button class="btn btn-ghost" id="prev"' + (qz.current === 0 ? " disabled" : "") + ">上一题</button>";
+  if (qz.current < qz.questions.length - 1) {
+    var canNext = isOnsite(q) || !!picked;
+    html += '<button class="btn" id="next"' + (canNext ? "" : " disabled") + ">下一题</button>";
+  } else {
+    html += '<button class="btn btn-green" id="submit"' + (answered === scored.length ? "" : " disabled") + ">提交答卷</button>";
+  }
+  html += "</div>";
+
+  html += '<div class="card" style="padding:14px"><div class="dots" style="margin:0">';
+  qz.questions.forEach(function (item, idx) {
+    var cls = "dot";
+    if (idx === qz.current) cls += " current";
+    else if (isOnsite(item)) cls += " onsite";
+    else if (qz.checked[item.id]) cls += qz.checked[item.id].isCorrect ? " ok" : " bad";
+    else if (normChoice(qz.answers[item.id])) cls += " ok";
+    html += '<button class="' + cls + '" data-goto="' + idx + '">' + (idx + 1) + "</button>";
+  });
+  html += "</div></div>";
+
+  if (answered < scored.length) {
+    html += '<p class="muted center" style="font-size:13px;margin-top:12px">还有 ' + (scored.length - answered) + " 道选择题未作答，全部作答后即可提交。</p>";
+  }
+
+  $("#app").innerHTML = html;
+  bindQuiz();
+}
+
+function bindQuiz() {
+  var qz = state.quiz;
+  var q = qz.questions[qz.current];
+  var prev = $("#prev"), next = $("#next"), submit = $("#submit");
+  if (prev) prev.onclick = function () { qz.current = Math.max(0, qz.current - 1); viewQuiz(); };
+  if (next) next.onclick = function () { qz.current = Math.min(qz.questions.length - 1, qz.current + 1); viewQuiz(); };
+  if (submit) submit.onclick = submitQuiz;
+  Array.prototype.forEach.call(document.querySelectorAll("[data-pick]"), function (btn) {
+    btn.onclick = function () {
+      if (qz.checked[q.id]) return;
+      var letter = btn.getAttribute("data-pick");
+      qz.answers[q.id] = letter;
+      qz.checked[q.id] = {
+        hasKey: hasKey(q),
+        isCorrect: hasKey(q) && normChoice(q.answer) === normChoice(letter),
+        correctAnswer: hasKey(q) ? normChoice(q.answer) : ""
+      };
+      viewQuiz();
+    };
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-goto]"), function (btn) {
+    btn.onclick = function () {
+      qz.current = Number(btn.getAttribute("data-goto"));
+      viewQuiz();
+    };
+  });
+}
+
+function submitQuiz() {
+  var qz = state.quiz;
+  var results = qz.questions.map(function (q, idx) {
+    var userAnswer = qz.answers[q.id] || "";
+    var onsite = isOnsite(q);
+    var key = hasKey(q);
+    var isCorrect = !onsite && key && normChoice(q.answer) === normChoice(userAnswer);
+    return {
+      id: q.id,
+      index: idx,
+      question: q.question,
+      type: q.type,
+      category: q.category,
+      options: q.options,
+      optionImages: q.optionImages,
+      images: q.images,
+      userAnswer: userAnswer,
+      correctAnswer: key ? q.answer : "",
+      isCorrect: isCorrect,
+      noKey: onsite || !key,
+      counted: countedQuestion(q),
+      correct: 0,
+      total: 0,
+      rate: 0
+    };
+  });
+  recordQuiz(results);
+  var rows = statsRows();
+  var byId = {};
+  rows.forEach(function (r) { byId[r.id] = r; });
+  results.forEach(function (r) {
+    var s = byId[r.id];
+    if (s) { r.correct = s.correct; r.total = s.total; r.rate = s.rate; }
+  });
+  var scored = results.filter(function (r) { return !r.noKey; });
+  state.result = {
+    score: scored.filter(function (r) { return r.isCorrect; }).length,
+    total: scored.length,
+    results: results
+  };
+  qz.submitted = true;
+  location.hash = "#/result";
+}
+
+/* ========== 6. 视图：结果 ========== */
+function fmtAnswer(r, value) {
+  if (!value) return "（未作答）";
+  if (r.type === "choice" && r.options) {
+    var i = LETTERS.indexOf(String(value).toUpperCase());
+    if (i >= 0 && r.options[i]) return value + ". " + r.options[i];
+  }
+  return value;
+}
+function imgOf(r, letter) {
+  if (!r.optionImages) return "";
+  var i = LETTERS.indexOf(String(letter).toUpperCase());
+  return i >= 0 ? r.optionImages[i] : "";
+}
+
+function viewResult() {
+  var d = state.result;
+  if (!d) { location.hash = "#/"; return; }
+  var onsite = d.results.filter(function (r) { return r.noKey; }).length;
+  var html = "";
+  html += '<div class="card center">';
+  html += '<p class="muted" style="margin:0">本次得分</p>';
+  html += '<div class="score">' + d.score + "<span> / " + d.total + "</span></div>";
+  html += '<p class="muted" style="margin:0">正确率 ' + (d.total ? (d.score / d.total * 100).toFixed(0) : 0) + "%</p>";
+  if (onsite) html += '<p style="color:#b45309;font-size:14px;margin:8px 0 0">另有 ' + onsite + " 道现场题由工作人员判定，不计入得分。</p>";
+  html += '<div style="margin-top:22px;display:flex;gap:12px;justify-content:center">' +
+          '<button class="btn" id="again">再答一次</button>' +
+          '<a class="btn btn-ghost" href="#/">返回首页</a></div>';
+  html += "</div>";
+
+  d.results.forEach(function (r) {
+    var cls = r.noKey ? "onsite" : r.isCorrect ? "ok" : "bad";
+    html += '<div class="result-card ' + cls + '">';
+    html += '<div class="row"><span class="muted" style="font-size:12px">' + esc(r.category) + " · 第 " + (r.index + 1) + " 题</span>";
+    html += '<span class="tag ' + cls + '">' + (r.noKey ? "现场判定" : r.isCorrect ? "答对" : "答错") + "</span></div>";
+    html += '<h2 style="margin-top:8px">' + esc(r.question) + "</h2>";
+    if (r.images && r.images.length) {
+      html += '<div class="figures">';
+      r.images.forEach(function (src) { html += '<figure><img src="' + esc(src) + '" alt="配图"></figure>'; });
+      html += "</div>";
+    }
+    if (r.noKey) {
+      html += '<p style="color:#b45309;font-size:14px;margin:0">本题由现场工作人员判定，不计分、不计入正确率统计。</p>';
+    } else {
+      html += '<p style="font-size:14px;color:' + (r.isCorrect ? "#15803d" : "#b91c1c") + ';margin:0">你的答案：' + esc(fmtAnswer(r, r.userAnswer)) + "</p>";
+      var picked = imgOf(r, r.userAnswer), right = imgOf(r, r.correctAnswer);
+      if (picked) html += '<div class="thumbs"><img class="' + (r.isCorrect ? "ok" : "bad") + '" src="' + esc(picked) + '" alt="你的选择"></div>';
+      if (!r.isCorrect) {
+        html += '<p style="font-size:14px;color:#15803d;margin:8px 0 0">正确答案：' + esc(fmtAnswer(r, r.correctAnswer)) + "</p>";
+        if (right) html += '<div class="thumbs"><img class="ok" src="' + esc(right) + '" alt="正确答案"></div>';
+      }
+      html += '<p class="muted" style="font-size:12px;margin:12px 0 0;border-top:1px solid #f1f5f9;padding-top:10px">历史正确率 ' +
+              (r.rate * 100).toFixed(1) + "%（" + r.correct + "/" + r.total + " 次答对）</p>";
+    }
+    html += "</div>";
+  });
+  $("#app").innerHTML = html;
+  $("#again").onclick = function () {
+    state.quiz = newQuiz();
+    state.result = null;
+    location.hash = "#/quiz";
+  };
+}
+
+/* ========== 7. 视图：正确率统计 ========== */
+function viewStats() {
+  var s = summary();
+  var html = "";
+  html += '<div class="row" style="margin-bottom:16px"><h1 style="font-size:22px;margin:0">题目正确率统计</h1>' +
+          '<button class="btn btn-sm" id="refresh">刷新</button></div>';
+  html += '<p class="muted" style="font-size:13px">数据来自本机浏览器，选择题交卷后自动累计。活动现场可以把各台设备的成绩码收上来合并。</p>';
+  var onsiteIds = BANK.filter(function (q) { return !countedQuestion(q); }).map(function (q) { return q.id; });
+  if (onsiteIds.length) {
+    html += '<p class="note onsite" style="margin-top:8px;font-weight:400">以下题目不参与正确率统计：第 ' + onsiteIds.join("、") + " 题</p>";
+  }
+  html += '<div class="stats-grid" style="margin:16px 0">' +
+    '<div class="stat"><span class="muted">题目总数</span><b>' + s.total + "</b></div>" +
+    '<div class="stat"><span class="muted">累计答题次数</span><b>' + s.attempts + "</b></div>" +
+    '<div class="stat"><span class="muted">整体平均正确率</span><b style="color:var(--indigo)">' + (s.avg * 100).toFixed(1) + "%</b></div>" +
+    "</div>";
+  html += '<div class="table-wrap"><table><thead><tr><th>ID</th><th>题目</th><th>分类</th><th style="text-align:center">答对/总次数</th><th>正确率</th></tr></thead><tbody>';
+  var sorted = s.rows.slice().sort(function (a, b) { return b.rate - a.rate; });
+  sorted.forEach(function (r) {
+    html += "<tr><td class=\"muted\">" + r.id + "</td><td>" + esc(r.question) + "</td><td class=\"muted\">" + esc(r.category) +
+      '</td><td style="text-align:center" class="muted">' + r.correct + "/" + r.total +
+      '</td><td><div class="rate"><div class="bar"><div style="width:' + (r.rate * 100) + '%"></div></div>' +
+      (r.rate * 100).toFixed(1) + "%</div></td></tr>";
+  });
+  html += "</tbody></table></div>";
+
+  html += '<div class="card" style="margin-top:16px">';
+  html += "<h2 style='font-size:16px'>成绩码：汇总多台设备的数据</h2>";
+  html += '<p class="hint">本机统计好后点「生成成绩码」，把这段文字发给负责汇总的同学；负责汇总的电脑把它粘到下面点「合并成绩码」，各台设备的数据就会相加。同一份成绩码重复合并会自动忽略。</p>';
+  html += '<textarea id="code-box" readonly placeholder="点下面的按钮生成本机成绩码"></textarea>';
+  html += '<div class="tools">' +
+    '<button class="btn btn-sm" id="gen-code">生成成绩码</button>' +
+    '<button class="btn btn-sm btn-ghost" id="copy-code">复制</button>' +
+    '<button class="btn btn-sm btn-ghost" id="dl-code">下载成绩码</button>' +
+    '<button class="btn btn-sm btn-ghost" id="dl-report">导出正确率报表</button>' +
+    '<button class="btn btn-sm btn-ghost" id="reset">清空本机统计</button>' +
+    "</div>";
+  html += '<p class="hint" style="margin-top:16px">把别人给的成绩码粘贴到这里：</p>';
+  html += '<textarea id="import-box" placeholder="粘贴成绩码（MW1-开头）"></textarea>';
+  html += '<div class="tools"><button class="btn btn-sm btn-green" id="merge-code">合并成绩码</button></div>';
+  html += '<p class="msg" id="msg"></p>';
+  html += "</div>";
+
+  $("#app").innerHTML = html;
+
+  var msg = function (text) { $("#msg").textContent = text; };
+  $("#refresh").onclick = viewStats;
+  $("#gen-code").onclick = function () {
+    var code = makeCode();
+    $("#code-box").value = code;
+    msg("已生成成绩码，长度 " + code.length + " 字符。");
+  };
+  $("#copy-code").onclick = function () {
+    var box = $("#code-box");
+    if (!box.value) { msg("请先生成成绩码。"); return; }
+    box.removeAttribute("readonly");
+    box.select();
+    try { document.execCommand("copy"); msg("已复制到剪贴板。"); }
+    catch (e) { msg("复制失败，请手动选中复制。"); }
+    box.setAttribute("readonly", "readonly");
+  };
+  $("#dl-code").onclick = function () {
+    var code = $("#code-box").value || makeCode();
+    $("#code-box").value = code;
+    download("成绩码-" + deviceTag() + ".txt", code);
+    msg("成绩码已下载。");
+  };
+  $("#dl-report").onclick = function () {
+    download("正确率统计.txt", reportText(), true);
+    msg("正确率报表已下载（Excel 可直接打开）。");
+  };
+  $("#reset").onclick = function () {
+    if (confirm("确定清空本机的答题统计吗？此操作不可撤销。")) {
+      saveRecords({});
+      saveImported([]);
+      viewStats();
+    }
+  };
+  $("#merge-code").onclick = function () {
+    try {
+      var r = mergeCode($("#import-box").value);
+      msg(r.msg);
+      if (r.ok) { $("#import-box").value = ""; viewStats(); $("#msg").textContent = r.msg; }
+    } catch (e) {
+      msg("合并失败：" + e.message);
+    }
+  };
+}
+
+/* ========== 8. 路由 ========== */
+function route() {
+  var hash = location.hash || "#/";
+  window.scrollTo(0, 0);
+  if (hash.indexOf("#/quiz") === 0) viewQuiz();
+  else if (hash.indexOf("#/result") === 0) viewResult();
+  else if (hash.indexOf("#/stats") === 0) viewStats();
+  else viewHome();
+}
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>

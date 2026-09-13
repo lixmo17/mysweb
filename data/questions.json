@@ -1,0 +1,318 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "type": "choice",
+      "question": "人气动画《我推的孩子》中，传奇偶像星野爱所在的偶像团体是？",
+      "options": ["Mygo!!!!!", "Aqours", "B-小町", "coMETIK"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 2,
+      "type": "choice",
+      "question": "在《为美好的世界献上祝福》中，惠惠使用爆裂魔法的超长咏唱词的最后一个单词是？",
+      "options": ["Bomb", "Explosion", "Blast", "Rupture"],
+      "answer": "B",
+      "category": "动漫"
+    },
+    {
+      "id": 3,
+      "type": "choice",
+      "question": "《物语》系列金曲“恋爱循环”是哪位角色的角色曲？",
+      "options": ["羽川翼", "千石抚子", "神原骏河", "战场原黑仪"],
+      "answer": "B",
+      "category": "动漫"
+    },
+    {
+      "id": 4,
+      "type": "choice",
+      "question": "《死神》系列中，反派蓝染的卍解名字是？",
+      "options": ["镜花水月", "天锁斩月", "千本樱景严", "大红莲冰轮丸"],
+      "answer": "A",
+      "category": "动漫"
+    },
+    {
+      "id": 5,
+      "type": "choice",
+      "question": "《辉夜大小姐想让我告白》中，四宫辉夜最后去做的职业是？",
+      "options": ["教师", "政治家", "法官", "摄影师"],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 6,
+      "type": "choice",
+      "question": "在《宝可梦》系列中，不能学习“龙舞”技能的宝可梦是？",
+      "options": ["快龙", "暴飞龙", "烈咬陆鲨", "三首恶龙"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 7,
+      "type": "choice",
+      "question": "下列异世界动画中，哪部动画不涉及主角穿越进异世界的环节？",
+      "options": [
+        "Re：从零开始的异世界生活",
+        "葬送的芙莉莲",
+        "零之使魔",
+        "游戏人生"
+      ],
+      "answer": "B",
+      "category": "动漫"
+    },
+    {
+      "id": 8,
+      "type": "choice",
+      "question": "下列恋爱动画中，哪个动画的故事不是发生在高中？",
+      "options": [
+        "堀与宫村",
+        "我的青春恋爱物语果然有问题",
+        "冰菓",
+        "我心里危险的东西"
+      ],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 9,
+      "type": "choice",
+      "question": "在《刃牙》系列中，击败了宫本武藏的人是？",
+      "options": ["烈海王", "愚地独步", "本部以藏", "花山熏"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 10,
+      "type": "choice",
+      "question": "《机动战士高达 铁血的奥尔芬斯》中，团长奥尔加·伊兹卡在临死前的最后一句话是？",
+      "options": [
+        "“不要停下来啊”",
+        "“我看见了时间”",
+        "“我说过我会保护你的”",
+        "“就托付给你了，巴纳吉”"
+      ],
+      "answer": "A",
+      "category": "动漫"
+    },
+    {
+      "id": 11,
+      "type": "choice",
+      "question": "下列哪部少女乐队动画的主角乐队没有键盘手？",
+      "options": ["Girls Band Cry", "轻音少女", "BangDream Ave Mujica", "孤独摇滚"],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 12,
+      "type": "choice",
+      "question": "下列哪件宝具，没有被卫宫士郎投影过？",
+      "options": [
+        "射杀百头",
+        "炽天覆七重圆环",
+        "万符必应破戒",
+        "天地乖离开辟之星"
+      ],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 13,
+      "type": "choice",
+      "question": "在《JoJo的奇妙冒险》中，哪句话不是乔斯达家的人说的？",
+      "options": [
+        "“这就是我的逃跑路线”",
+        "“这里满员了”",
+        "“就像是在新年的早上换上新内裤一样清爽”",
+        "“你的下一句话是——”"
+      ],
+      "answer": "A",
+      "category": "动漫"
+    },
+    {
+      "id": 14,
+      "type": "choice",
+      "question": "在《电锯人》第一季中，完结时电次吃的食物是？",
+      "options": ["抹茶巴菲", "炸鸡块", "生姜烧肉", "牛肉饭"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 15,
+      "type": "choice",
+      "question": "下列怪物中，哪一只怪物的首次出现是在《怪物猎人世界》中？",
+      "options": ["泡狐龙", "天彗龙", "雷狼龙", "灭尽龙"],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 16,
+      "type": "choice",
+      "question": "“为了活下去，我要杀了你”这句台词出自？",
+      "options": ["咒术回战", "鬼灭之刃", "碧蓝之海", "火影忍者"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 17,
+      "type": "choice",
+      "question": "下列哪位女角色是完完全全的“直女”？",
+      "options": ["甘织玲奈子", "御坂美琴", "井之上泷奈", "斯莱塔·墨丘利"],
+      "answer": "B",
+      "category": "动漫"
+    },
+    {
+      "id": 18,
+      "type": "choice",
+      "question": "在《EVA》TV版最后一集中，大家围着真嗣说了什么？",
+      "options": ["辛苦你了", "不要再驾驶EVA了", "恭喜", "欢迎回来"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 19,
+      "type": "choice",
+      "question": "以下哪名角色不具有多重人格？",
+      "options": ["武藤游戏", "夜神月", "若叶睦", "迪亚波罗"],
+      "answer": "B",
+      "category": "动漫"
+    },
+    {
+      "id": 20,
+      "type": "choice",
+      "question": "在万代南梦宫旗下作品中，出现了一句台词“我们不是机器！我们是活生生的人类啊！”，该作品是？",
+      "options": [
+        "《机动战士高达00》",
+        "《超时空要塞F》",
+        "《学园偶像大师》",
+        "《叛逆的鲁鲁修》"
+      ],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 21,
+      "type": "choice",
+      "question": "在电影《千与千寻》中，角色“小白”的真实身份是？",
+      "options": ["阴阳师", "幽灵", "河神", "山神"],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 22,
+      "type": "fill",
+      "question": "这是一个二刺猿留下的谜题，你能破译出一个六字密码吗？",
+      "images": [
+        "/questions/puzzle-1.jpg",
+        "/questions/puzzle-2.jpg",
+        "/questions/puzzle-3.png",
+        "/questions/puzzle-4.jpg",
+        "/questions/puzzle-5.png",
+        "/questions/puzzle-6.jpg"
+      ],
+      "answer": "",
+      "category": "综合",
+      "countInStats": false
+    },
+    {
+      "id": 23,
+      "type": "choice",
+      "question": "连一刻也没有为五条的死而哀悼，马上赶到战场的是——",
+      "options": [
+        "西中之虎 虎杖悠仁",
+        "雷神 鹿紫云一",
+        "金牌律师 日车宽见",
+        "纯爱战神 乙骨忧太"
+      ],
+      "answer": "B",
+      "category": "动漫"
+    },
+    {
+      "id": 24,
+      "type": "choice",
+      "question": "孩子们，我是奇异博士，你能帮我找出一条吉尔伽美什赢到最后的时间线吗？",
+      "options": [
+        "Fate/Zero",
+        "Fate/Stay Night",
+        "Fate/Strange Fake",
+        "Fate/Extra CCC"
+      ],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 25,
+      "type": "choice",
+      "question": "冬天是败犬的季节，那么下面哪个动画的女主角和男主角是青梅竹马并成功在一起了？",
+      "options": [
+        "《龙王的工作》",
+        "《中二病也想谈恋爱》",
+        "《败犬女主太多了》",
+        "《路人女主的养成方法》"
+      ],
+      "answer": "A",
+      "category": "动漫"
+    },
+    {
+      "id": 26,
+      "type": "choice",
+      "question": "同名角色是二次元界津津乐道的话题，下面哪两位同名角色性别相同？",
+      "options": [
+        "优木 雪菜（Setsuna）—— 刹那（Setsuna）·F·清英",
+        "惣流·明日香（Asuka）·兰格雷 —— 真 飞鸟（Asuka）",
+        "吉良（Kira） 吉影 —— 基拉（Kira）·大和",
+        "圣园 未花（Mika）—— 三日月（Mikazuki）·奥古斯"
+      ],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 27,
+      "type": "choice",
+      "question": "你接到一则报案，发生了一起凶杀案，死者有四个疑似身份，你觉得死者只可能是？",
+      "options": ["二阶堂希罗", "菜月昴", "网代慎平", "巴麻美"],
+      "answer": "D",
+      "category": "动漫"
+    },
+    {
+      "id": 28,
+      "type": "choice",
+      "question": "以下哪部作品是真正的正作而非外传？",
+      "options": [
+        "《某科学的超电磁炮》",
+        "《某少女的暗部共栖》",
+        "《魔法禁书目录》",
+        "《某科学的一方通行》"
+      ],
+      "answer": "C",
+      "category": "动漫"
+    },
+    {
+      "id": 29,
+      "type": "choice",
+      "question": "以下哪张脸的主人是阿尔托莉雅？",
+      "optionImages": [
+        "/questions/saber-a.jpg",
+        "/questions/saber-b.jpg",
+        "/questions/saber-c.jpg",
+        "/questions/saber-d.jpg"
+      ],
+      "answer": "A",
+      "category": "动漫"
+    },
+    {
+      "id": 30,
+      "type": "fill",
+      "question": "这四个角色的图片顺序被打乱了，你能给出正确的排序吗？请说出 1、2、3、4 分别是谁。（提示：三角初华 / 一之濑帆波 / 四宫辉夜 / 二阶堂希罗）",
+      "images": [
+        "/questions/sort-1.png",
+        "/questions/sort-2.jpg",
+        "/questions/sort-3.jpg",
+        "/questions/sort-4.png"
+      ],
+      "answer": "",
+      "category": "综合",
+      "countInStats": false
+    }
+  ]
+}
