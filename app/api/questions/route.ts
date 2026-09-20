@@ -17,6 +17,7 @@ export async function GET(request: Request) {
     options: q.options,
     optionImages: q.optionImages,
     images: q.images,
+    hint: q.hint,
     category: q.category,
   }));
 

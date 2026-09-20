@@ -9,6 +9,8 @@ export interface Question {
   optionImages?: string[];
   /** 题干配图 */
   images?: string[];
+  /** 需要点击「提示」按钮才显示的提示内容 */
+  hint?: string;
   answer: string;
   category: string;
   countInStats?: boolean;

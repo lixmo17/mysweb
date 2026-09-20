@@ -11,6 +11,7 @@ interface QuizQuestion {
   options?: string[];
   optionImages?: string[];
   images?: string[];
+  hint?: string;
   category: string;
 }
 
@@ -29,6 +30,7 @@ export default function QuizPage() {
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [checked, setChecked] = useState<Record<number, CheckResult>>({});
   const [checking, setChecking] = useState<number | null>(null);
+  const [openHints, setOpenHints] = useState<Record<number, boolean>>({});
   const [current, setCurrent] = useState(0);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -184,9 +186,33 @@ export default function QuizPage() {
         <div className="mb-1 text-xs text-slate-400">
           {q.category} · {q.type === "choice" ? "选择题" : "现场题"}
         </div>
-        <h2 className="mb-5 text-lg font-semibold leading-relaxed text-slate-800">
-          {current + 1}. {q.question}
-        </h2>
+        <div className="mb-5 flex items-start justify-between gap-3">
+          <h2 className="flex-1 text-lg font-semibold leading-relaxed text-slate-800">
+            {current + 1}. {q.question}
+          </h2>
+          {q.hint && (
+            <button
+              type="button"
+              onClick={() =>
+                setOpenHints((prev) => ({ ...prev, [q.id]: !prev[q.id] }))
+              }
+              className={`shrink-0 rounded-lg border px-3 py-1 text-sm font-medium transition ${
+                openHints[q.id]
+                  ? "border-amber-300 bg-amber-50 text-amber-700"
+                  : "border-slate-300 bg-white text-slate-500 hover:border-amber-300 hover:text-amber-700"
+              }`}
+            >
+              {openHints[q.id] ? "收起提示" : "提示"}
+            </button>
+          )}
+        </div>
+
+        {q.hint && openHints[q.id] && (
+          <div className="mb-4 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            <span className="font-semibold">提示：</span>
+            {q.hint}
+          </div>
+        )}
 
         {q.images && q.images.length > 0 && (
           <div

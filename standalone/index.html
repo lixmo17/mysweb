@@ -270,6 +270,31 @@
   .msg { font-size: 13px; margin-top: 8px; color: var(--indigo); }
   .hidden { display: none !important; }
   .q-title { font-size: 18px; font-weight: 700; margin: 4px 0 16px; }
+  .q-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .q-head .q-title { flex: 1; }
+  .hint-btn {
+    flex: none;
+    margin-top: 6px;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    color: #64748b;
+    border-radius: 10px;
+    padding: 4px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .hint-btn:hover { border-color: #fcd34d; color: #b45309; }
+  .hint-btn.open { border-color: #fcd34d; background: #fffbeb; color: #b45309; }
+  .hint-box {
+    background: #fffbeb;
+    color: #92400e;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    margin: 0 0 16px;
+  }
   @media (max-width: 560px) {
     .stats-grid { grid-template-columns: 1fr; }
     .figures { grid-template-columns: repeat(2, 1fr); }
@@ -583,8 +608,9 @@
     {
       "id": 23,
       "type": "fill",
-      "question": "这是一个二刺猿留下的谜题，你能破译出一个六字密码吗？（提示：北部玄驹 / 市川京太郎 / 结城理 / 工藤新一 / 大场奈奈 / 文学少女）",
+      "question": "这是一个二刺猿留下的谜题，你能破译出一个六字密码吗？",
       "category": "普通",
+      "hint": "北部玄驹 / 市川京太郎 / 结城理 / 工藤新一 / 大场奈奈 / 文学少女",
       "images": [
         "questions/puzzle-1.jpg",
         "questions/puzzle-2.jpg",
@@ -1482,7 +1508,7 @@ var state = { quiz: null, result: null };
 
 function newQuiz() {
   var qs = drawQuestions(10);
-  return { questions: qs, answers: {}, checked: {}, current: 0, submitted: false };
+  return { questions: qs, answers: {}, checked: {}, hints: {}, current: 0, submitted: false };
 }
 
 function viewQuiz() {
@@ -1503,7 +1529,16 @@ function viewQuiz() {
           (runningScore > 0 ? " · 已答对 " + runningScore : "") + "</span></div>";
   html += '<div class="progress"><div style="width:' + ((qz.current + 1) / qz.questions.length * 100) + '%"></div></div>';
   html += '<div class="muted" style="font-size:12px">' + esc(q.category) + " · " + (isOnsite(q) ? "现场题" : "选择题") + "</div>";
-  html += '<div class="q-title">' + (qz.current + 1) + ". " + esc(q.question) + "</div>";
+  var hintOpen = !!(qz.hints && qz.hints[q.id]);
+  html += '<div class="q-head"><div class="q-title">' + (qz.current + 1) + ". " + esc(q.question) + "</div>";
+  if (q.hint) {
+    html += '<button class="hint-btn' + (hintOpen ? " open" : "") + '" data-hint="' + q.id + '">' +
+            (hintOpen ? "收起提示" : "提示") + "</button>";
+  }
+  html += "</div>";
+  if (q.hint && hintOpen) {
+    html += '<div class="hint-box"><b>提示：</b>' + esc(q.hint) + "</div>";
+  }
 
   if (q.images && q.images.length) {
     html += '<div class="figures' + (q.images.length >= 4 ? "" : " two") + '">';
@@ -1607,6 +1642,13 @@ function bindQuiz() {
   Array.prototype.forEach.call(document.querySelectorAll("[data-goto]"), function (btn) {
     btn.onclick = function () {
       qz.current = Number(btn.getAttribute("data-goto"));
+      viewQuiz();
+    };
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-hint]"), function (btn) {
+    btn.onclick = function () {
+      var id = btn.getAttribute("data-hint");
+      qz.hints[id] = !qz.hints[id];
       viewQuiz();
     };
   });
