@@ -22,7 +22,7 @@ npm run build
 npm run start
 ```
 
-- 题库：`data/questions.json`（68 题：普通 43 题 + gal 25 题，gal 题抽中概率为普通题的一半）
+- 题库：`data/questions.json`（73 题：普通 48 题 + gal 25 题；每次抽 10 题平均约 9 道普通题 + 1 道 gal 题）
 - 统计数据：`data/records.json`，导出报表在根目录 `正确率统计.txt`
 - 局域网内其他设备访问 `http://本机IP:3000` 即可
 - 需要有一台机器一直跑着服务

@@ -11,8 +11,11 @@ export async function getQuestions(): Promise<Question[]> {
   return data.questions;
 }
 
-/** gal 题库的抽中概率是普通题库的一半 */
-const GAL_WEIGHT = 0.5;
+/**
+ * gal 题库每道题的抽题权重。普通题库每题权重 1。
+ * 取 0.2 时，每次抽 10 题平均约为 9 道普通题 + 1 道 gal 题。
+ */
+const GAL_WEIGHT = 0.2;
 
 export function questionWeight(q: Question): number {
   return q.category === "gal" ? GAL_WEIGHT : 1;
